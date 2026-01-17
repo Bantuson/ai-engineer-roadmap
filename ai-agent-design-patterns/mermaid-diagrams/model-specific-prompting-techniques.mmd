@@ -1,0 +1,83 @@
+graph TD
+    Start[User Input] --> Detect[Detect Target Model]
+
+    Detect --> Models{Which Model Family?}
+
+    Models --> Claude[Claude/Anthropic]
+    Models --> GPT[GPT/OpenAI]
+    Models --> Gemini[Gemini/Google]
+    Models --> Llama[Llama/Meta]
+    Models --> Other[Other Models]
+
+    Claude --> XML_Format[Use XML Tags]
+    GPT --> JSON_Format[Use JSON Format]
+    Gemini --> Markdown[Use Markdown Format]
+    Llama --> Plain[Use Plain Text]
+    Other --> Generic[Use Generic Format]
+
+    XML_Format --> Claude_Best[Claude Best Practices]
+    Claude_Best --> Think_Tags[Use think Tags]
+    Claude_Best --> Role_Tags[Use Role Tags]
+    Claude_Best --> Structure[Structured Sections]
+
+    JSON_Format --> GPT_Best[GPT Best Practices]
+    GPT_Best --> System_Role[Strong System Role]
+    GPT_Best --> Functions[Function Calling]
+    GPT_Best --> Response_Format[Response Format]
+
+    Gemini_Best --> Multimodal[Multimodal Support]
+    Gemini_Best --> Safety[Safety Settings]
+    Markdown --> Gemini_Best[Gemini Best Practices]
+
+    Plain --> Llama_Best[Llama Best Practices]
+    Llama_Best --> Instruct[Instruction Format]
+    Llama_Best --> Context_Len[Context Length]
+
+    Generic --> Analyze[Analyze Capabilities]
+
+    Think_Tags --> Optimize[Optimize Prompt]
+    Role_Tags --> Optimize
+    Structure --> Optimize
+    System_Role --> Optimize
+    Functions --> Optimize
+    Response_Format --> Optimize
+    Multimodal --> Optimize
+    Safety --> Optimize
+    Instruct --> Optimize
+    Context_Len --> Optimize
+    Analyze --> Optimize
+
+    Optimize --> Params{Set Parameters}
+
+    Params --> Temperature[Temperature Setting]
+    Params --> TopP[Top-P Value]
+    Params --> MaxTokens[Max Tokens]
+    Params --> StopSeq[Stop Sequences]
+
+    Temperature --> Tune[Fine-Tune Settings]
+    TopP --> Tune
+    MaxTokens --> Tune
+    StopSeq --> Tune
+
+    Tune --> Execute[Execute Request]
+    Execute --> Parse[Parse Response]
+
+    Parse --> Validate{Valid Output?}
+
+    Validate -->|Yes| Format[Format for User]
+    Validate -->|No| Retry[Adjust and Retry]
+
+    Retry --> Params
+    Format --> Normalize[Normalize Response]
+
+    Normalize --> Cache[Cache Settings]
+    Cache --> Learn[Learn What Works]
+
+    Learn --> Update[Update Model Profile]
+    Update --> End[Optimized Output]
+
+    style Start fill:#e1f5fe
+    style Models fill:#fff59d
+    style Params fill:#fff9c4
+    style Validate fill:#f3e5f5
+    style End fill:#c8e6c9

@@ -1,0 +1,65 @@
+# CrewAI Task Configuration
+# Tasks are executed sequentially: plot -> write -> edit
+
+plot_story:
+  description: >
+    Create a detailed three-act story outline based on this premise:
+    {story_premise}
+
+    Your outline should include:
+    - Act 1 (Setup): Introduce the protagonist, their world, and the inciting incident
+    - Act 2 (Confrontation): The rising action, challenges, and midpoint twist
+    - Act 3 (Resolution): The climax and satisfying conclusion
+
+    For each act, provide:
+    - Key scenes (2-3 per act)
+    - Character motivations
+    - Emotional beats
+  expected_output: >
+    A structured three-act outline with clear scene descriptions,
+    character arcs, and plot points that will guide the writer.
+  agent: plotter
+
+write_story:
+  description: >
+    Using the story outline provided, write a complete short story (500-800 words).
+
+    Requirements:
+    - Start with a hook that grabs the reader's attention
+    - Include vivid sensory details and descriptions
+    - Use dialogue to reveal character
+    - Show emotions through actions and reactions
+    - Build tension towards the climax
+    - Provide a satisfying ending
+
+    Story Outline to follow:
+    {plot_outline}
+  expected_output: >
+    A complete, engaging short story of 500-800 words that brings
+    the outline to life with compelling prose and emotional depth.
+  agent: writer
+  context:
+    - plot_story
+
+edit_story:
+  description: >
+    Edit and polish the following story to professional quality:
+
+    {draft_story}
+
+    Your editing should:
+    - Improve sentence flow and rhythm
+    - Enhance descriptions where needed
+    - Tighten any verbose passages
+    - Ensure consistent tone and voice
+    - Fix any awkward phrasing
+    - Add sensory details if lacking
+    - Verify the emotional impact is strong
+
+    Preserve the author's voice while elevating the prose.
+  expected_output: >
+    A polished, publication-ready short story that maintains the
+    original vision while being enhanced for maximum reader impact.
+  agent: editor
+  context:
+    - write_story

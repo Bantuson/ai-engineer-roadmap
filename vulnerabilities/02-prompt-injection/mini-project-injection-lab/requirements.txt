@@ -1,0 +1,2 @@
+# Prompt Injection Lab Dependencies
+openai>=1.0.0

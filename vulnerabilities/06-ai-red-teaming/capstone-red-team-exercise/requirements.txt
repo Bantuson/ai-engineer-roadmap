@@ -1,0 +1,2 @@
+# Red Team Exercise Dependencies
+openai>=1.0.0

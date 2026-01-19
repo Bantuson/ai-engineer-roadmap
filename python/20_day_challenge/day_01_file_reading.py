@@ -97,7 +97,7 @@ def example_finding_pattern():
 # EXERCISES
 # =============================================================================
 
-def exercise_1():
+def exercise_1(filepath):
     """
     Exercise 1: Line Counter
 
@@ -105,11 +105,16 @@ def exercise_1():
 
     Expected output for sample.txt: 4
     """
-    # YOUR CODE HERE
-    pass
+    count = 0 
+    with open(filepath, 'r') as file:                                                                                                      
+        for line in file:                                                                                                                  
+            line.strip()
+            count += 1 
+                                                                                                                                          
+    return count
 
 
-def exercise_2():
+def exercise_2(filepath):
     """
     Exercise 2: Character Counter
 
@@ -117,11 +122,15 @@ def exercise_2():
 
     Hint: Use len() on stripped lines
     """
-    # YOUR CODE HERE
-    pass
+    count = 0 
+    with open(filepath, 'r') as file:                                                                                                      
+        for line in file:
+            if len(line.strip()):
+                count += len(line.strip())
 
+    return count
 
-def exercise_3():
+def exercise_3(filepath):
     """
     Exercise 3: Longest Line
 
@@ -129,11 +138,17 @@ def exercise_3():
 
     Return both the line content and its length.
     """
-    # YOUR CODE HERE
-    pass
+    longest = ""
+    with open(filepath, 'r') as file:
+        for line in file:
+            if len(line) > len(longest):
+                longest = line
+
+    return longest
+    
 
 
-def exercise_4():
+def exercise_4(filepath):
     """
     Exercise 4: Line Filter
 
@@ -142,15 +157,21 @@ def exercise_4():
     - Don't start with '#' (comments)
     - Have more than 5 characters
     """
-    # YOUR CODE HERE
-    pass
+    filtered_line = []
+    with open(filepath, 'r') as file:
+        for line in file:
+            stripped = line.strip()
+            if stripped and not stripped.startswith('#') and len(stripped) > 5:
+                filtered_line.append(line)
+
+        return filtered_line
 
 
 # =============================================================================
 # CHALLENGE
 # =============================================================================
 
-def challenge():
+def challenge(filepath):
     """
     Challenge: File Statistics
 
@@ -172,8 +193,46 @@ def challenge():
         'longest_word': 'programming'
     }
     """
-    # YOUR CODE HERE
-    pass
+    total_lines = 0                                                                                                                                      
+    empty_lines = 0                                                                                                                                      
+    total_words = 0                                                                                                                                      
+    total_chars = 0                                                                                                                                      
+    longest_word = ""
+
+    with open(filepath, 'r') as file:                                                                                                                    
+          for line in file:                                                                                                                                
+              stripped = line.strip()
+              total_lines += 1                                                                                                                       
+
+              if not stripped:
+                empty_lines +=1
+
+              words = stripped.split()
+              total_words += len(words)
+
+              total_chars += len(stripped)
+
+              for word in words:
+                  if len(word) > len(longest_word):
+                    longest_word = word
+
+    # Calculate average (after the loop, before return)                                                                                                  
+    # Guard against division by zero if file is empty                                                                                                    
+    if total_lines > 0:                                                                                                                                  
+        avg_line_length = total_chars / total_lines                                                                                                      
+    else:                                                                                                                                                
+        avg_line_length = 0.0                                                                                                                            
+                                                                                                                                                           
+    return {                                                                                                                                             
+          'total_lines': total_lines,                                                                                                                      
+          'empty_lines': empty_lines,                                                                                                                      
+          'total_words': total_words,                                                                                                                      
+          'total_chars': total_chars,                                                                                                                      
+          'avg_line_length': avg_line_length,                                                                                                              
+          'longest_word': longest_word                                                                                                                     
+    }                                                                                                                
+    
+    
 
 
 # =============================================================================
@@ -194,13 +253,16 @@ if __name__ == "__main__":
     print("Uncomment and run each exercise function to test.")
 
     # Uncomment to test your exercises:
-    # exercise_1()
-    # exercise_2()
-    # exercise_3()
-    # exercise_4()
-    # challenge()
+    exercise_1()
+    exercise_2()
+    exercise_3()
+    exercise_4()
+    challenge()
 
     # Cleanup
     import os
     if os.path.exists('sample.txt'):
         os.remove('sample.txt')
+
+
+

@@ -126,7 +126,7 @@ def example_atomic_write():
 # EXERCISES
 # =============================================================================
 
-def exercise_1():
+def exercise_1(filepath, config_dict):
     """
     Exercise 1: Config File Writer
 
@@ -141,11 +141,12 @@ def exercise_1():
     port=5432
     host=localhost
     """
-    # YOUR CODE HERE
-    pass
+    with open(filepath, 'w') as file:                                                                                                                    
+        for key, value in config_dict.items():                                                                                            
+            file.write(f"{key}={value}\n") 
 
 
-def exercise_2():
+def exercise_2(filepath):
     """
     Exercise 2: Log Rotator
 
@@ -156,11 +157,19 @@ def exercise_2():
 
     This simulates basic log rotation.
     """
-    # YOUR CODE HERE
-    pass
+    with open(filepath, 'r') as file:                                                                                                                    
+        lines = file.readlines()
 
+    if len(lines) > 100:                                                                                                                                 
+        old_lines = lines[:-50]                                                                                             
+        new_lines = lines[-50:]
 
-def exercise_3():
+        with open(filepath, 'w') as file:
+            file.writelines(old_lines)
+        with open(filepath, 'w') as file:
+            file.writelines(new_lines)
+
+def exercise_3(input_file, output_file):
     """
     Exercise 3: Numbered Lines
 
@@ -174,12 +183,14 @@ def exercise_3():
     Output:
     1: Hello
     2: World
-    """
-    # YOUR CODE HERE
-    pass
+    """                                                                                                          
+    with open(input_file, 'r') as infile:                                                                                                                
+        with open(output_file, 'w') as outfile:                                                                                                          
+            for num, line in enumerate(infile, 1):                                                                                                       
+                outfile.write(f"{num}: {line}")
 
 
-def exercise_4():
+def exercise_4(file_list, output_file):
     """
     Exercise 4: File Merger
 
@@ -193,16 +204,18 @@ def exercise_4():
     # --- From: file2.txt ---
     [content of file2]
     """
-    # YOUR CODE HERE
-    pass
+    with open(output_file, 'w') as outfile:                                                                                                              
+        for filepath in file_list:                                                                                                                       
+            outfile.write(f"# --- From: {filepath} ---\n")                                                                                               
+            with open(filepath, 'r') as infile:                                                                                                          
+                outfile.write(infile.read())                                                                                                             
+            outfile.write("\n") 
 
 
 # =============================================================================
 # CHALLENGE
 # =============================================================================
-
-def challenge():
-    """
+"""
     Challenge: Simple Database File
 
     Create a simple "database" using a text file with these operations:
@@ -225,9 +238,68 @@ def challenge():
     records = read_all('people.db')
     found = find('people.db', 'city', 'NYC')
     delete('people.db', 'name', 'Bob')
-    """
-    # YOUR CODE HERE
-    pass
+"""
+def create_db(filepath):                                                                                                                                 
+    with open(filepath, 'w') as file:                                                                                                                    
+        file.write("# name,age,city\n")
+
+def insert(filepath, record):                                                                                                                            
+    # record.values() gives: ['Alice', '30', 'NYC']                                                                                                      
+    # ','.join() turns it into: 'Alice,30,NYC'                                                                                                           
+    line = ','.join(record.values())                                                                                                                     
+                                                                                                                                                           
+    with open(filepath, 'a') as file:  # 'a' = append                                                                                                    
+        file.write(line + '\n')
+
+def read_all(filepath):                                                                                                                                  
+    records = []                                                                                                                                         
+                                                                                                                                                           
+    with open(filepath, 'r') as file:                                                                                                                    
+        # First line is header: "# name,age,city\n"                                                                                                      
+        header_line = file.readline()                                                                                                                    
+        # Remove "# " prefix and \n, then split                                                                                                          
+        fields = header_line.strip().lstrip('# ').split(',')                                                                                             
+        # fields = ['name', 'age', 'city']                                                                                                               
+                                                                                                                                                           
+        for line in file:                                                                                                                                
+            values = line.strip().split(',')                                                                                                             
+            # values = ['Alice', '30', 'NYC']                                                                                                            
+                                                                                                                                                           
+            # Pair fields with values using zip()                                                                                                        
+            record = {}                                                                                                                                  
+            for field, value in zip(fields, values):                                                                                                     
+                record[field] = value                                                                                                                    
+            # record = {'name': 'Alice', 'age': '30', 'city': 'NYC'}                                                                                     
+                                                                                                                                                           
+            records.append(record)                                                                                                                       
+                                                                                                                                                           
+    return records 
+
+def find(filepath, field, value):                                                                                                                        
+    all_records = read_all(filepath)  # Reuse function 3!                                                                                                
+                                                                                                                                                           
+    matches = []                                                                                                                                         
+    for record in all_records:                                                                                                                           
+        if record[field] == value:                                                                                                                       
+            matches.append(record)                                                                                                                       
+                                                                                                                                                           
+    return matches
+
+def delete(filepath, field, value):                                                                                                                      
+    all_records = read_all(filepath)                                                                                                                     
+                                                                                                                                                           
+    # Keep records that DON'T match                                                                                                                      
+    kept = []                                                                                                                                            
+    for record in all_records:                                                                                                                           
+        if record[field] != value:  # NOT equal                                                                                                          
+            kept.append(record)                                                                                                                          
+                                                                                                                                                           
+    # Rewrite file: header + kept records                                                                                                                
+    with open(filepath, 'w') as file:                                                                                                                    
+        file.write("# name,age,city\n")                                                                                                                  
+        for record in kept:                                                                                                                              
+            line = ','.join(record.values())                                                                                                             
+            file.write(line + '\n')  
 
 
 # =============================================================================
